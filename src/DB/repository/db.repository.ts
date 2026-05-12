@@ -5,6 +5,7 @@
   UpdateResult,
   DeleteResult,
   ObjectLiteral,
+  FindManyOptions,
 } from 'typeorm';
 
 
@@ -23,8 +24,15 @@ export class DbRepository<T extends ObjectLiteral> {
     return this.repo.findOneBy(where);
   }
 
-  async find(where: FindOptionsWhere<T>): Promise<T[]> {
-    return this.repo.findBy(where);
+  async find(where?: FindOptionsWhere<T>): Promise<T[]> {
+ return where ? this.repo.findBy(where) : this.repo.find()
+  }
+   async findWithOptions(options: FindManyOptions<T>): Promise<T[]> {
+    return this.repo.find(options);
+  }
+
+  async count(where?: FindOptionsWhere<T>): Promise<number> {  // ✅ جديد
+    return this.repo.countBy(where ?? {});
   }
   getQueryBuilder(alias: string) {
   return this.repo.createQueryBuilder(alias);
