@@ -5,4 +5,4 @@ export const TokenName = 'TokenName';
 
 export const Token = (TokenType: TokenEnum) => {
   return SetMetadata(TokenName, TokenType);
-};
+};  
