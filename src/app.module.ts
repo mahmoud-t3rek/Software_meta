@@ -5,6 +5,7 @@ import { Connection } from './DB/connection/db.connection';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './module/auth/auth.module';
 import {ThrottlerModule} from '@nestjs/throttler';
+import { PostModule } from './module/post/post.module';
 @Module({
   imports: [  
      ThrottlerModule.forRoot({
@@ -18,7 +19,7 @@ import {ThrottlerModule} from '@nestjs/throttler';
     ConfigModule.forRoot({
       envFilePath: './config/.env',
       isGlobal: true,
-    }),Connection(), AuthModule
+    }),Connection(), AuthModule, PostModule
   ],
   controllers: [AppController],
   providers: [AppService],

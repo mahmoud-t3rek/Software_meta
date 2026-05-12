@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {  UserRegistarDto } from './dto/registar.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginUserDto } from './dto/login.dto';
-
+@ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -18,7 +18,7 @@ export class AuthController {
   }
 
   @Post('login')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'login  user' })
   @ApiResponse({ status: 201, description: 'login successfully' })
   @ApiResponse({ status: 400, description: 'Email already exists / Validation error' })
