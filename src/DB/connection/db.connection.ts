@@ -1,7 +1,6 @@
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Post, User } from '../models';
-import { Token } from '../models/token.model';
 
 export const Connection = () =>
   TypeOrmModule.forRoot({
@@ -10,6 +9,6 @@ export const Connection = () =>
   ssl: {
     rejectUnauthorized: false,
   },
-  entities: [User, Post, Token],
+  entities: [User, Post],
   synchronize: true,
 });

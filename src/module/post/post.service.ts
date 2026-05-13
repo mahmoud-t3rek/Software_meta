@@ -20,7 +20,7 @@ async getPosts() {
   return {message:"posts",Posts}
 }
   async createPost(body: CreatePostDto , user:User) {
-  const {content,title,}=body
+  const {content,title}=body
 
   const post =await this.postRepo.create({
     content,

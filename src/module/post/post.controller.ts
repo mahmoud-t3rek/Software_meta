@@ -20,7 +20,6 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 
-import type { Request } from 'express';
 import { PostService } from './post.service';
 import { AuthGuard } from '../../common/guards/auth.guard';
 import { CreatePostDto } from './dto/createpost.dto';
@@ -48,7 +47,6 @@ export class PostsController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new post (auth required)' })
   @ApiResponse({ status: 201, description: 'Post created successfully' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async createPost(
     @Body() body: CreatePostDto,
    @Req() req: IAuth
@@ -64,9 +62,6 @@ export class PostsController {
   @ApiOperation({ summary: 'Update a post (owner only)' })
   @ApiParam({ name: 'id', type: Number, example: 1 })
   @ApiResponse({ status: 200, description: 'Post updated successfully' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden — not the owner' })
-  @ApiResponse({ status: 404, description: 'Post not found' })
   async updatePost(
     @Param('id', ParseIntPipe) id: number,
     @Body() body: UpdatePostDto,
@@ -83,9 +78,6 @@ export class PostsController {
   @ApiOperation({ summary: 'Delete a post (owner only)' })
   @ApiParam({ name: 'id', type: Number, example: 1 })
   @ApiResponse({ status: 200, description: 'Post deleted successfully' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden — not the owner' })
-  @ApiResponse({ status: 404, description: 'Post not found' })
   async deletePost(
     @Param('id', ParseIntPipe) id: number,
     @Req() req: IAuth,

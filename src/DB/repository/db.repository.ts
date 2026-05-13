@@ -31,18 +31,6 @@ export class DbRepository<T extends ObjectLiteral> {
     return this.repo.find(options);
   }
 
-  async count(where?: FindOptionsWhere<T>): Promise<number> {  // ✅ جديد
-    return this.repo.countBy(where ?? {});
-  }
-  getQueryBuilder(alias: string) {
-  return this.repo.createQueryBuilder(alias);
-}
-  async createMany(data: DeepPartial<T>[]): Promise<T[]> {
-    const entities = this.repo.create(data);
-    return this.repo.save(entities);
-  }
-
-
   async update(
     where: FindOptionsWhere<T>,
     data: Partial<T>,
@@ -50,13 +38,6 @@ export class DbRepository<T extends ObjectLiteral> {
     return this.repo.update(where, data);
   }
 
-  async updateAndReturn(
-    where: FindOptionsWhere<T>,
-    data: Partial<T>,
-  ): Promise<T | null> {
-    await this.repo.update(where, data);
-    return this.repo.findOneBy(where);
-  }
 
   async delete(where: FindOptionsWhere<T>): Promise<DeleteResult> {
     return this.repo.delete(where);

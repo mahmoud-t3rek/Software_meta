@@ -10,7 +10,6 @@ import { JwtPayload } from 'jsonwebtoken';
 import { User } from '../../../DB/models/user.model';
 import { TokenEnum } from '../../enums/token.enum';
 import { UserRepository } from '../../../DB';
-import { TokenRepository } from '../../../DB/repository/token.repository';
 
 export type Credential = {
   user: User;
@@ -22,7 +21,6 @@ export class TokenService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly userRepo: UserRepository,
-    private readonly tokenRepo: TokenRepository,
   ) {}
 
   createToken = async ({
@@ -96,10 +94,7 @@ export class TokenService {
       throw new UnauthorizedException('Invalid authorization format');
     }
 
-    const secret =
-      TokenType === TokenEnum.AcessToken
-        ? process.env.ACCESS_TOKEN_SECRET!
-        : process.env.REFRESH_TOKEN_SECRET!;
+    const secret =TokenType === TokenEnum.AcessToken ? process.env.ACCESS_TOKEN_SECRET! : process.env.REFRESH_TOKEN_SECRET!;
 
     let decoded: JwtPayload;
 
@@ -114,13 +109,6 @@ export class TokenService {
 
     if (!decoded?.userId) {
       throw new BadRequestException('Invalid token payload');
-    }
-
-    if (
-      decoded.jti &&
-      (await this.tokenRepo.findOne({ jti: decoded.jti }))
-    ) {
-      throw new UnauthorizedException('Token has been invalidated');
     }
 
     const user = await this.userRepo.findOne({
