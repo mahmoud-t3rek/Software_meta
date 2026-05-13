@@ -26,8 +26,9 @@ const user=await this.userRepo.create({
   email,
   password:hashPassword
 })
-const { password:_, ...safeUser } = user;
-return {message: 'User created successfully',safeUser}
+
+const {password:_,...nopassword}=user
+return {message: 'User created successfully',nopassword}
 }
 async Login(body:LoginUserDto){
  const { email, password } = body;

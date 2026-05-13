@@ -1,45 +1,15 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Body,
-  Param,
-  ParseIntPipe,
-  UseGuards,
-  HttpCode,
-  HttpStatus,
-  Req,
-} from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBearerAuth,
-  ApiParam,
-} from '@nestjs/swagger';
-
+import {Controller,Get,Post,Put,Delete,Body,Param,ParseIntPipe,UseGuards,HttpCode,HttpStatus,Req,} from '@nestjs/common';
+import {ApiTags,ApiOperation,ApiResponse,ApiBearerAuth,ApiParam} from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { AuthGuard } from '../../common/guards/auth.guard';
 import { CreatePostDto } from './dto/createpost.dto';
 import type { IAuth } from '../../common/interface/token.interface';
-import { UpdatePostDto } from './dto/update-post.dto';
+import { IdParamDto, UpdatePostDto } from './dto/update-post.dto';
 
 @ApiTags('Posts')
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postService: PostService) {}
-
-
-  @Get()
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Get all blog posts (public)' })
-  @ApiResponse({ status: 200, description: 'List of all posts' })
-  async getAllPosts() {
-    return this.postService.getPosts();
-  }
-
 
   @Post()
   @UseGuards(AuthGuard)
@@ -55,6 +25,17 @@ export class PostsController {
     return this.postService.createPost(body, req.Credentiales.user);
   }
 
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Get all blog posts (public)' })
+  @ApiResponse({ status: 200, description: 'List of all posts' })
+  async getAllPosts() {
+    return this.postService.getPosts();
+  }
+
+
+
+
   @Put(':id')
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
@@ -63,12 +44,12 @@ export class PostsController {
   @ApiParam({ name: 'id', type: Number, example: 1 })
   @ApiResponse({ status: 200, description: 'Post updated successfully' })
   async updatePost(
-    @Param('id', ParseIntPipe) id: number,
+    @Param() post: IdParamDto,
     @Body() body: UpdatePostDto,
     @Req() req: IAuth,
   ) {
     
-    return this.postService.updatePost(id, body, req.Credentiales.user);
+    return this.postService.updatePost(post.id, body, req.Credentiales.user);
   }
 
   @Delete(':id')
@@ -79,10 +60,10 @@ export class PostsController {
   @ApiParam({ name: 'id', type: Number, example: 1 })
   @ApiResponse({ status: 200, description: 'Post deleted successfully' })
   async deletePost(
-    @Param('id', ParseIntPipe) id: number,
+    @Param() post: IdParamDto,
     @Req() req: IAuth,
   ) {
   
-    return this.postService.RemovePost(id, req.Credentiales.user);
+    return this.postService.RemovePost(post.id, req.Credentiales.user);
   }
 }

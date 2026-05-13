@@ -1,14 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  MinLength,
-  MaxLength,
-  IsStrongPassword,
-  IsOptional,
-  Matches,
-} from 'class-validator';
+import {IsEmail,IsNotEmpty,IsString,MinLength,MaxLength,IsStrongPassword} from 'class-validator';
 import { IsMatch } from '../../../common/decorators/confirmPass.decrator';
 
 export class UserRegistarDto {

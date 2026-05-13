@@ -1,14 +1,4 @@
-    import {
-  Repository,
-  FindOptionsWhere,
-  DeepPartial,
-  UpdateResult,
-  DeleteResult,
-  ObjectLiteral,
-  FindManyOptions,
-} from 'typeorm';
-
-
+    import {Repository,FindOptionsWhere,DeepPartial,UpdateResult,DeleteResult,ObjectLiteral,FindManyOptions} from 'typeorm';
 
 export class DbRepository<T extends ObjectLiteral> {
   constructor(
@@ -24,17 +14,14 @@ export class DbRepository<T extends ObjectLiteral> {
     return this.repo.findOneBy(where);
   }
 
-  async find(where?: FindOptionsWhere<T>): Promise<T[]> {
+async find(where?: FindOptionsWhere<T>): Promise<T[]> {
  return where ? this.repo.findBy(where) : this.repo.find()
   }
    async findWithOptions(options: FindManyOptions<T>): Promise<T[]> {
     return this.repo.find(options);
   }
 
-  async update(
-    where: FindOptionsWhere<T>,
-    data: Partial<T>,
-  ): Promise<UpdateResult> {
+  async update(where: FindOptionsWhere<T>,data: Partial<T>): Promise<UpdateResult> {
     return this.repo.update(where, data);
   }
 

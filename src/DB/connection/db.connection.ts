@@ -10,5 +10,5 @@ export const Connection = () =>
     rejectUnauthorized: false,
   },
   entities: [User, Post],
-  synchronize: true,
+  synchronize: false,
 });

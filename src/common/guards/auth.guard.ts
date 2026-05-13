@@ -1,9 +1,4 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import {CanActivate, ExecutionContext,Injectable,UnauthorizedException} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { TokenService } from '../utils/Token';
 import { TokenEnum } from '../enums/token.enum';
@@ -19,11 +14,9 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const tokenType =
-      this.reflector.getAllAndOverride<TokenEnum>(TokenName, [
-        context.getHandler(),
+    const tokenType = this.reflector.getAllAndOverride<TokenEnum>(TokenName, [ context.getHandler(),
         context.getClass(),
-      ]) ?? TokenEnum.AcessToken;
+      ]) ?? TokenEnum.AcessToken;  
 
     if (context.getType() !== 'http') {
       return false;

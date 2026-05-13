@@ -6,7 +6,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 export const SwaggerConnect=(app:INestApplication)=>{
 const swaggerConfig = new DocumentBuilder()
     .setTitle('task softwaremeta')
-    .setDescription('API documentation for Super Fitness backend')
+    .setDescription('API documentation for softwaremeta')
     .setVersion('1.0')
     .addBearerAuth(
       {

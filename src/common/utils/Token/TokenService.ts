@@ -10,11 +10,9 @@ import { JwtPayload } from 'jsonwebtoken';
 import { User } from '../../../DB/models/user.model';
 import { TokenEnum } from '../../enums/token.enum';
 import { UserRepository } from '../../../DB';
+import { ICredentiales } from '../../interface/token.interface';
 
-export type Credential = {
-  user: User;
-  decoded: JwtPayload;
-};
+
 
 @Injectable()
 export class TokenService {
@@ -30,6 +28,7 @@ export class TokenService {
     payload: object;
     options?: JwtSignOptions;
   }): Promise<string> => {
+
     return this.jwtService.signAsync(payload, options);
   };
 
@@ -42,6 +41,7 @@ export class TokenService {
     secret: string;
     options?: JwtVerifyOptions;
   }): Promise<JwtPayload> => {
+
     return this.jwtService.verifyAsync(token, {
       ...options,
       secret,
@@ -75,10 +75,7 @@ export class TokenService {
       },
     });
 
-    return {
-      accessToken,
-      refreshToken,
-    };
+    return { accessToken,refreshToken};
   };
 
   Decoded = async ({
@@ -87,14 +84,14 @@ export class TokenService {
   }: {
     Authorization: string;
     TokenType: TokenEnum;
-  }): Promise<Credential> => {
+  }): Promise<ICredentiales> => {
     const [Bearer, token] = Authorization.split(' ');
 
     if (Bearer !== 'Bearer' || !token) {
       throw new UnauthorizedException('Invalid authorization format');
     }
 
-    const secret =TokenType === TokenEnum.AcessToken ? process.env.ACCESS_TOKEN_SECRET! : process.env.REFRESH_TOKEN_SECRET!;
+    const secret = TokenType === TokenEnum.AcessToken ? process.env.ACCESS_TOKEN_SECRET! : process.env.REFRESH_TOKEN_SECRET!;
 
     let decoded: JwtPayload;
 
@@ -119,9 +116,6 @@ export class TokenService {
       throw new NotFoundException('User not found');
     }
 
-    return {
-      user,
-      decoded,
-    };
+    return { user, decoded};
   };
 }  
