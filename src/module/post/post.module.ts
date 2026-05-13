@@ -5,12 +5,11 @@ import { Post, PostRepository, User, UserRepository } from '../../DB';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TokenService } from '../../common/utils/Token';
 import { JwtService } from '@nestjs/jwt';3
-import { TokenRepository } from '../../DB/repository/token.repository';
-import { Token } from '../../DB/models/token.model';
+
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Post,User,Token])],
+  imports:[TypeOrmModule.forFeature([Post,User])],
   controllers: [PostsController],
-  providers: [PostService,PostRepository,TokenService,JwtService,TokenRepository,UserRepository],
+  providers: [PostService,PostRepository,TokenService,JwtService,UserRepository],
 })
 export class PostModule {}

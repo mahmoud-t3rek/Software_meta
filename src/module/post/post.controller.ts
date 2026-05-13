@@ -1,37 +1,29 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Body,
-  Param,
-  ParseIntPipe,
-  UseGuards,
-  HttpCode,
-  HttpStatus,
-  Req,
-} from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBearerAuth,
-  ApiParam,
-} from '@nestjs/swagger';
-
-import type { Request } from 'express';
+import {Controller,Get,Post,Put,Delete,Body,Param,ParseIntPipe,UseGuards,HttpCode,HttpStatus,Req,} from '@nestjs/common';
+import {ApiTags,ApiOperation,ApiResponse,ApiBearerAuth,ApiParam} from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { AuthGuard } from '../../common/guards/auth.guard';
 import { CreatePostDto } from './dto/createpost.dto';
 import type { IAuth } from '../../common/interface/token.interface';
-import { UpdatePostDto } from './dto/update-post.dto';
+import { IdParamDto, UpdatePostDto } from './dto/update-post.dto';
 
 @ApiTags('Posts')
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postService: PostService) {}
 
+  @Post()
+  @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.CREATED)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create a new post (auth required)' })
+  @ApiResponse({ status: 201, description: 'Post created successfully' })
+  async createPost(
+    @Body() body: CreatePostDto,
+   @Req() req: IAuth
+  ) {
+  
+    return this.postService.createPost(body, req.Credentiales.user);
+  }
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -42,20 +34,7 @@ export class PostsController {
   }
 
 
-  @Post()
-  @UseGuards(AuthGuard)
-  @HttpCode(HttpStatus.CREATED)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create a new post (auth required)' })
-  @ApiResponse({ status: 201, description: 'Post created successfully' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async createPost(
-    @Body() body: CreatePostDto,
-   @Req() req: IAuth
-  ) {
-  
-    return this.postService.createPost(body, req.Credentiales.user);
-  }
+
 
   @Put(':id')
   @UseGuards(AuthGuard)
@@ -64,16 +43,13 @@ export class PostsController {
   @ApiOperation({ summary: 'Update a post (owner only)' })
   @ApiParam({ name: 'id', type: Number, example: 1 })
   @ApiResponse({ status: 200, description: 'Post updated successfully' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden — not the owner' })
-  @ApiResponse({ status: 404, description: 'Post not found' })
   async updatePost(
-    @Param('id', ParseIntPipe) id: number,
+    @Param() post: IdParamDto,
     @Body() body: UpdatePostDto,
     @Req() req: IAuth,
   ) {
     
-    return this.postService.updatePost(id, body, req.Credentiales.user);
+    return this.postService.updatePost(post.id, body, req.Credentiales.user);
   }
 
   @Delete(':id')
@@ -83,14 +59,11 @@ export class PostsController {
   @ApiOperation({ summary: 'Delete a post (owner only)' })
   @ApiParam({ name: 'id', type: Number, example: 1 })
   @ApiResponse({ status: 200, description: 'Post deleted successfully' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden — not the owner' })
-  @ApiResponse({ status: 404, description: 'Post not found' })
   async deletePost(
-    @Param('id', ParseIntPipe) id: number,
+    @Param() post: IdParamDto,
     @Req() req: IAuth,
   ) {
   
-    return this.postService.RemovePost(id, req.Credentiales.user);
+    return this.postService.RemovePost(post.id, req.Credentiales.user);
   }
 }

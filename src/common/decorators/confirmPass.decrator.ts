@@ -1,10 +1,4 @@
-import {
-  registerDecorator,
-  ValidationArguments,
-  ValidationOptions,
-  ValidatorConstraint,
-  ValidatorConstraintInterface,
-} from 'class-validator';
+import {registerDecorator,ValidationArguments,ValidationOptions,ValidatorConstraint,ValidatorConstraintInterface} from 'class-validator';
 
 @ValidatorConstraint({ async: false })
 export class MatchBetweenFields implements ValidatorConstraintInterface {
@@ -23,10 +17,7 @@ export class MatchBetweenFields implements ValidatorConstraintInterface {
   }
 }
 
-export function IsMatch(
-  constraints: string[],
-  validationOptions?: ValidationOptions,
-) {
+export function IsMatch(constraints: string[],validationOptions?: ValidationOptions) {
   return function (object: object, propertyName: string) {
     registerDecorator({
       target: object.constructor,

@@ -5,8 +5,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 export const SwaggerConnect=(app:INestApplication)=>{
 const swaggerConfig = new DocumentBuilder()
-    .setTitle('Super Fitness API')
-    .setDescription('API documentation for Super Fitness backend')
+    .setTitle('task softwaremeta')
+    .setDescription('API documentation for softwaremeta')
     .setVersion('1.0')
     .addBearerAuth(
       {
@@ -23,6 +23,6 @@ const swaggerConfig = new DocumentBuilder()
   SwaggerModule.setup('api-docs', app, document, {
     jsonDocumentUrl: 'api-docs-json',
     swaggerOptions: { persistAuthorization: true },
-    customSiteTitle: 'Super Fitness API Docs',
+    customSiteTitle: 'task softwareMetaDocs',
   });
 }

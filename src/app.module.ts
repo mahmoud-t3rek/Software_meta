@@ -12,14 +12,17 @@ import { PostModule } from './module/post/post.module';
       throttlers: [
         {
           ttl: 60000,
-          limit: 10,
+          limit: 5,
         },
       ],
     }),
     ConfigModule.forRoot({
       envFilePath: './config/.env',
       isGlobal: true,
-    }),Connection(), AuthModule, PostModule
+    }),
+    Connection(),
+     AuthModule, 
+     PostModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -7,20 +7,8 @@ import { UpdatePostDto } from './dto/update-post.dto';
 export class PostService {
 
   constructor(private readonly postRepo:PostRepository ) {}
-async getPosts() {
-
-  const Posts=await this.postRepo.findWithOptions({
-    relations: ['author'],
-    select: {
-      author: { id: true, name: true, email: true },
-    },
-    order: { createdAt: 'DESC' },
-  });
- 
-  return {message:"posts",Posts}
-}
-  async createPost(body: CreatePostDto , user:User) {
-  const {content,title,}=body
+    async createPost(body: CreatePostDto , user:User) {
+  const {content,title}=body
 
   const post =await this.postRepo.create({
     content,
@@ -28,7 +16,20 @@ async getPosts() {
     authorId:user.id,
   })
 
- return { message: 'Post created successfully', post: post };  }
+ return { message: 'Post created successfully', post: post };  
+}
+async getPosts() {
+
+  const Posts=await this.postRepo.findWithOptions({
+    relations: ['author'],
+    select: {
+      author: { name: true ,email:true},
+    },
+    order: { createdAt: 'DESC' },
+  });
+ 
+  return {message:"posts",Posts}
+}
 
  async updatePost(id: number, body: UpdatePostDto, user: User) {
   if (!body || Object.keys(body).length === 0) {
@@ -43,11 +44,11 @@ async getPosts() {
     throw new NotFoundException('Post not found or not yours');
   }
 
-const updatepost=await this.postRepo.update(
+await this.postRepo.update(
   { id, authorId: user.id },
-  {
-    ...body
-  }
+ {
+  ...body
+ }
 );
 
 
@@ -55,10 +56,7 @@ const post = await this.postRepo.findOne({
   id,
 });
 
-  return {
-    message: 'Post updated successfully',
-    post: post,
-  };
+  return { message: 'Post updated successfully',post: post};
 }
  async RemovePost(id: number, user: User) {
   
@@ -72,8 +70,6 @@ const post = await this.postRepo.findOne({
     throw new BadRequestException('Failed to delete post');
   }
 
-  return {
-    message: 'Post Deleted successfully',
-  };
+  return { message: 'Post Deleted successfully'};
 }
 }
